@@ -18,6 +18,20 @@ on:
   # release:
   #   types: [published]
 
+env:
+  REPO_URL: https://github.com/coolsnowwolf/lede
+  REPO_BRANCH: master
+  FEEDS_CONF: feeds.conf.default
+  CONFIG_FILE: .config
+  DIY_P1_SH: diy-part1.sh
+  DIY_P2_SH: diy-part2.sh
+  SSH_ACTIONS: true
+  UPLOAD_BIN_DIR: true
+  UPLOAD_FIRMWARE: true
+  UPLOAD_COWTRANSFER: false
+  UPLOAD_WETRANSFER: false
+  TZ: Asia/Shanghai
+  
 jobs:
 
   build_openwrt:
@@ -33,6 +47,10 @@ jobs:
         with:
           ref: master
 
+      - name: SSH connection to Actions
+        uses: P3TERX/debugger-action@master
+        if: env.SSH_ACTIONS == 'true' || contains(github.event.action, 'ssh')
+ 
       - name: Space cleanup
         env:
           DEBIAN_FRONTEND: noninteractive
